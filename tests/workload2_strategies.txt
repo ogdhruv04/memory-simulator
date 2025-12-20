@@ -1,0 +1,37 @@
+# Test workload 2: Compare allocation strategies
+# Run the same workload with different strategies
+
+# ===== FIRST FIT =====
+init memory 512
+set allocator first_fit
+malloc 64
+malloc 128
+malloc 64
+free 2
+malloc 32
+dump memory
+stats
+
+# ===== BEST FIT =====
+init memory 512
+set allocator best_fit
+malloc 64
+malloc 128
+malloc 64
+free 2
+malloc 32
+dump memory
+stats
+
+# ===== WORST FIT =====
+init memory 512
+set allocator worst_fit
+malloc 64
+malloc 128
+malloc 64
+free 2
+malloc 32
+dump memory
+stats
+
+exit

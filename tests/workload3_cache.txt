@@ -1,0 +1,30 @@
+# Test workload 3: Cache simulation
+
+# Initialize cache hierarchy
+init cache
+cache config
+
+# Sequential access pattern (good locality)
+cache access 0x0000
+cache access 0x0010
+cache access 0x0020
+cache access 0x0030
+cache stats
+
+# Access same addresses again (should hit)
+cache access 0x0000
+cache access 0x0010
+cache access 0x0020
+cache access 0x0030
+cache stats
+
+# Reset and test random pattern
+cache reset
+cache access 0x1000
+cache access 0x2000
+cache access 0x3000
+cache access 0x4000
+cache access 0x1000
+cache stats
+
+exit

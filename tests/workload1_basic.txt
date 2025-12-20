@@ -1,0 +1,36 @@
+# Test workload 1: Basic allocation and deallocation
+# This tests First Fit allocation
+
+init memory 1024
+set allocator first_fit
+
+# Allocate several blocks
+malloc 100
+malloc 200
+malloc 150
+malloc 100
+
+# Show memory state
+dump memory
+stats
+
+# Free middle block to create a hole
+free 2
+
+# Show fragmentation
+dump memory
+stats
+
+# Allocate smaller block - should fill the hole
+malloc 50
+dump memory
+
+# Free more blocks
+free 1
+free 3
+
+# Coalescing should happen
+dump memory
+stats
+
+exit

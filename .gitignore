@@ -1,0 +1,22 @@
+# Git ignore file for Memory Management Simulator
+
+# Build artifacts
+build/
+*.o
+*.out
+memsim
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.log
