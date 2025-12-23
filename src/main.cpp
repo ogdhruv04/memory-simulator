@@ -18,6 +18,7 @@
 
 #include "allocator.h"
 #include "cache.h"
+using namespace std;
 
 // Helper function to split string by spaces
 std::vector<std::string> splitCommand(const std::string& line) {
