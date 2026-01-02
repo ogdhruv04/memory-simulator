@@ -128,12 +128,12 @@ int main() {
         
         // ===== INIT CACHE =====
         else if (cmd == "init" && tokens.size() >= 2 && tokens[1] == "cache") {
-            // Initialize default cache hierarchy
-            // L1: 256 bytes, 16-byte blocks, 4-way set associative, LRU
-            cacheSimulator.addLevel("L1", 256, 16, 4, ReplacementPolicy::LRU);
-            // L2: 1024 bytes, 32-byte blocks, 8-way set associative, FIFO
-            cacheSimulator.addLevel("L2", 1024, 32, 8, ReplacementPolicy::FIFO);
-            std::cout << "Cache hierarchy initialized\n";
+            // Initialize default cache hierarchy with realistic latencies
+            // L1: 256 bytes, 16-byte blocks, 4-way set associative, LRU, 1 cycle
+            cacheSimulator.addLevel("L1", 256, 16, 4, ReplacementPolicy::LRU, 1);
+            // L2: 1024 bytes, 32-byte blocks, 8-way set associative, FIFO, 10 cycles
+            cacheSimulator.addLevel("L2", 1024, 32, 8, ReplacementPolicy::FIFO, 10);
+            std::cout << "Cache hierarchy initialized (Memory latency: 100 cycles)\n";
         }
         
         // ===== SET ALLOCATOR =====

@@ -26,8 +26,9 @@ struct CacheStats {
     size_t hits;
     size_t misses;
     size_t accesses;
+    size_t total_access_time;  // Total cycles spent accessing this level
     
-    CacheStats() : hits(0), misses(0), accesses(0) {}
+    CacheStats() : hits(0), misses(0), accesses(0), total_access_time(0) {}
     
     double hitRatio() const {
         return accesses > 0 ? (double)hits / accesses * 100.0 : 0.0;
@@ -50,6 +51,7 @@ private:
     ReplacementPolicy policy;
     CacheStats stats;
     size_t access_counter;
+    size_t access_latency;  // Cycles to access this cache level
     
     // Get set index from address
     size_t getSetIndex(size_t address) const;
@@ -62,10 +64,14 @@ private:
 
 public:
     CacheLevel(const std::string& levelName, size_t cacheSize, 
-               size_t blockSize, size_t assoc, ReplacementPolicy pol);
+               size_t blockSize, size_t assoc, ReplacementPolicy pol,
+               size_t latency = 1);
     
     // Access cache, returns true on hit, false on miss
     bool access(size_t address);
+    
+    // Get access latency for this level
+    size_t getLatency() const { return access_latency; }
     
     // Get statistics
     CacheStats getStats() const;
@@ -84,17 +90,19 @@ class CacheSimulator {
 private:
     std::vector<CacheLevel*> levels;
     bool initialized;
+    size_t total_access_time;    // Cumulative access time across all accesses
+    size_t memory_latency;       // Latency for main memory access
 
 public:
     CacheSimulator();
     ~CacheSimulator();
     
-    // Add a cache level
+    // Add a cache level with configurable latency
     void addLevel(const std::string& name, size_t size, 
                   size_t blockSize, size_t associativity,
-                  ReplacementPolicy policy);
+                  ReplacementPolicy policy, size_t latency = 1);
     
-    // Access memory address through cache hierarchy
+    // Access memory address through cache hierarchy (verbose output)
     void access(size_t address);
     
     // Print statistics for all levels

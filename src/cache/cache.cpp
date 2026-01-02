@@ -6,9 +6,10 @@
 // ============ CacheLevel Implementation ============
 
 CacheLevel::CacheLevel(const std::string& levelName, size_t cacheSize, 
-                       size_t blockSize, size_t assoc, ReplacementPolicy pol)
+                       size_t blockSize, size_t assoc, ReplacementPolicy pol,
+                       size_t latency)
     : name(levelName), size(cacheSize), block_size(blockSize), 
-      associativity(assoc), policy(pol), access_counter(0) {
+      associativity(assoc), policy(pol), access_counter(0), access_latency(latency) {
     
     num_lines = size / block_size;
     num_sets = num_lines / associativity;
@@ -66,7 +67,8 @@ size_t CacheLevel::findVictim(size_t set_index) {
 
 bool CacheLevel::access(size_t address) {
     stats.accesses++;
-    access_counter++;
+    stats.total_access_time += access_latency;  // Always pay the access cost
+    access_counter++;;
     
     size_t set_index = getSetIndex(address);
     size_t tag = getTag(address);
@@ -117,7 +119,7 @@ std::string CacheLevel::getInfo() const {
 
 // ============ CacheSimulator Implementation ============
 
-CacheSimulator::CacheSimulator() : initialized(false) {}
+CacheSimulator::CacheSimulator() : initialized(false), total_access_time(0), memory_latency(100) {}
 
 CacheSimulator::~CacheSimulator() {
     for (auto level : levels) {
@@ -127,22 +129,39 @@ CacheSimulator::~CacheSimulator() {
 
 void CacheSimulator::addLevel(const std::string& name, size_t size, 
                                size_t blockSize, size_t associativity,
-                               ReplacementPolicy policy) {
-    levels.push_back(new CacheLevel(name, size, blockSize, associativity, policy));
+                               ReplacementPolicy policy, size_t latency) {
+    levels.push_back(new CacheLevel(name, size, blockSize, associativity, policy, latency));
     initialized = true;
-    std::cout << "Added cache level: " << levels.back()->getInfo() << "\n";
+    std::cout << "Added cache level: " << levels.back()->getInfo() 
+              << " (" << latency << " cycle" << (latency > 1 ? "s" : "") << " latency)\n";
 }
 
 void CacheSimulator::access(size_t address) {
-    // Access through cache hierarchy
-    for (auto level : levels) {
+    // Access through cache hierarchy with verbose output
+    size_t access_time = 0;
+    std::string path = "";
+    
+    for (size_t i = 0; i < levels.size(); i++) {
+        auto level = levels[i];
+        access_time += level->getLatency();
+        
         if (level->access(address)) {
-            // Hit at this level, no need to go further
+            // Hit at this level
+            path += level->getName() + " HIT";
+            std::cout << "  → " << path << " (" << access_time << " cycles)\n";
+            total_access_time += access_time;
             return;
+        } else {
+            // Miss at this level, continue to next
+            path += level->getName() + " MISS → ";
         }
-        // Miss, continue to next level
     }
-    // If we get here, it was a miss at all levels (memory access)
+    
+    // Miss at all levels - access main memory
+    access_time += memory_latency;
+    path += "MEMORY";
+    std::cout << "  → " << path << " (" << access_time << " cycles)\n";
+    total_access_time += access_time;
 }
 
 void CacheSimulator::printStats() const {
@@ -155,7 +174,11 @@ void CacheSimulator::printStats() const {
         std::cout << "  Misses:   " << stats.misses << "\n";
         std::cout << "  Hit Rate: " << std::fixed << std::setprecision(2) 
                   << stats.hitRatio() << "%\n";
+        std::cout << "  Access Time: " << stats.total_access_time << " cycles\n";
     }
+    std::cout << "------------------------\n";
+    std::cout << "Total Access Time: " << total_access_time << " cycles\n";
+    std::cout << "Memory Latency:    " << memory_latency << " cycles\n";
     std::cout << "========================\n\n";
 }
 
