@@ -1,0 +1,201 @@
+
+╔══════════════════════════════════════════════════════════╗
+║         MEMORY MANAGEMENT SIMULATOR                      ║
+║         OS Memory Concepts Demonstration                 ║
+╚══════════════════════════════════════════════════════════╝
+Type 'help' for available commands.
+
+> Unknown command: # =============================================================================
+Type 'help' for available commands.
+> Unknown command: # WORKLOAD 4: Stress Test - Heavy Allocation/Deallocation
+Type 'help' for available commands.
+> Unknown command: # =============================================================================
+Type 'help' for available commands.
+> Unknown command: # Tests system under heavy load with many allocations and frees
+Type 'help' for available commands.
+> Unknown command: # =============================================================================
+Type 'help' for available commands.
+> > Memory initialized: 4096 bytes
+> Allocator set to: First Fit
+> > Unknown command: # -----------------------------------------------------------------------------
+Type 'help' for available commands.
+> Unknown command: # Phase 1: Fill memory with many small blocks
+Type 'help' for available commands.
+> Unknown command: # -----------------------------------------------------------------------------
+Type 'help' for available commands.
+> Allocated block id=1 at address=0x0000 size=64
+> Allocated block id=2 at address=0x0040 size=64
+> Allocated block id=3 at address=0x0080 size=64
+> Allocated block id=4 at address=0x00c0 size=64
+> Allocated block id=5 at address=0x0100 size=64
+> Allocated block id=6 at address=0x0140 size=64
+> Allocated block id=7 at address=0x0180 size=64
+> Allocated block id=8 at address=0x01c0 size=64
+> Allocated block id=9 at address=0x0200 size=64
+> Allocated block id=10 at address=0x0240 size=64
+> Allocated block id=11 at address=0x0280 size=64
+> Allocated block id=12 at address=0x02c0 size=64
+> Allocated block id=13 at address=0x0300 size=64
+> Allocated block id=14 at address=0x0340 size=64
+> Allocated block id=15 at address=0x0380 size=64
+> Allocated block id=16 at address=0x03c0 size=64
+> > 
+=== Memory Dump ===
+[0x0000 - 0x003f] USED (id=1) [64 bytes]
+[0x0040 - 0x007f] USED (id=2) [64 bytes]
+[0x0080 - 0x00bf] USED (id=3) [64 bytes]
+[0x00c0 - 0x00ff] USED (id=4) [64 bytes]
+[0x0100 - 0x013f] USED (id=5) [64 bytes]
+[0x0140 - 0x017f] USED (id=6) [64 bytes]
+[0x0180 - 0x01bf] USED (id=7) [64 bytes]
+[0x01c0 - 0x01ff] USED (id=8) [64 bytes]
+[0x0200 - 0x023f] USED (id=9) [64 bytes]
+[0x0240 - 0x027f] USED (id=10) [64 bytes]
+[0x0280 - 0x02bf] USED (id=11) [64 bytes]
+[0x02c0 - 0x02ff] USED (id=12) [64 bytes]
+[0x0300 - 0x033f] USED (id=13) [64 bytes]
+[0x0340 - 0x037f] USED (id=14) [64 bytes]
+[0x0380 - 0x03bf] USED (id=15) [64 bytes]
+[0x03c0 - 0x03ff] USED (id=16) [64 bytes]
+[0x0400 - 0x0fff] FREE [3072 bytes]
+==================
+
+> 
+=== Memory Statistics ===
+Allocator:              First Fit
+Total memory:           4096 bytes
+Used memory:            1024 bytes
+Free memory:            3072 bytes
+Memory utilization:     25.0%
+Allocations:            16
+Deallocations:          0
+Allocation failures:    0
+External fragmentation: 0.0%
+=========================
+
+> > Unknown command: # -----------------------------------------------------------------------------
+Type 'help' for available commands.
+> Unknown command: # Phase 2: Free every other block (creates checkerboard pattern)
+Type 'help' for available commands.
+> Unknown command: # -----------------------------------------------------------------------------
+Type 'help' for available commands.
+> Block 2 freed and merged
+> Block 4 freed and merged
+> Block 6 freed and merged
+> Block 8 freed and merged
+> Block 10 freed and merged
+> Block 12 freed and merged
+> Block 14 freed and merged
+> Block 16 freed and merged
+> > 
+=== Memory Dump ===
+[0x0000 - 0x003f] USED (id=1) [64 bytes]
+[0x0040 - 0x007f] FREE [64 bytes]
+[0x0080 - 0x00bf] USED (id=3) [64 bytes]
+[0x00c0 - 0x00ff] FREE [64 bytes]
+[0x0100 - 0x013f] USED (id=5) [64 bytes]
+[0x0140 - 0x017f] FREE [64 bytes]
+[0x0180 - 0x01bf] USED (id=7) [64 bytes]
+[0x01c0 - 0x01ff] FREE [64 bytes]
+[0x0200 - 0x023f] USED (id=9) [64 bytes]
+[0x0240 - 0x027f] FREE [64 bytes]
+[0x0280 - 0x02bf] USED (id=11) [64 bytes]
+[0x02c0 - 0x02ff] FREE [64 bytes]
+[0x0300 - 0x033f] USED (id=13) [64 bytes]
+[0x0340 - 0x037f] FREE [64 bytes]
+[0x0380 - 0x03bf] USED (id=15) [64 bytes]
+[0x03c0 - 0x0fff] FREE [3136 bytes]
+==================
+
+> 
+=== Memory Statistics ===
+Allocator:              First Fit
+Total memory:           4096 bytes
+Used memory:            512 bytes
+Free memory:            3584 bytes
+Memory utilization:     12.5%
+Allocations:            16
+Deallocations:          8
+Allocation failures:    0
+External fragmentation: 12.5%
+=========================
+
+> > Unknown command: # -----------------------------------------------------------------------------
+Type 'help' for available commands.
+> Unknown command: # Phase 3: Try to allocate larger blocks (tests fragmentation impact)
+Type 'help' for available commands.
+> Unknown command: # -----------------------------------------------------------------------------
+Type 'help' for available commands.
+> Allocated block id=17 at address=0x03c0 size=128
+> Allocated block id=18 at address=0x0440 size=128
+> > 
+=== Memory Dump ===
+[0x0000 - 0x003f] USED (id=1) [64 bytes]
+[0x0040 - 0x007f] FREE [64 bytes]
+[0x0080 - 0x00bf] USED (id=3) [64 bytes]
+[0x00c0 - 0x00ff] FREE [64 bytes]
+[0x0100 - 0x013f] USED (id=5) [64 bytes]
+[0x0140 - 0x017f] FREE [64 bytes]
+[0x0180 - 0x01bf] USED (id=7) [64 bytes]
+[0x01c0 - 0x01ff] FREE [64 bytes]
+[0x0200 - 0x023f] USED (id=9) [64 bytes]
+[0x0240 - 0x027f] FREE [64 bytes]
+[0x0280 - 0x02bf] USED (id=11) [64 bytes]
+[0x02c0 - 0x02ff] FREE [64 bytes]
+[0x0300 - 0x033f] USED (id=13) [64 bytes]
+[0x0340 - 0x037f] FREE [64 bytes]
+[0x0380 - 0x03bf] USED (id=15) [64 bytes]
+[0x03c0 - 0x043f] USED (id=17) [128 bytes]
+[0x0440 - 0x04bf] USED (id=18) [128 bytes]
+[0x04c0 - 0x0fff] FREE [2880 bytes]
+==================
+
+> 
+=== Memory Statistics ===
+Allocator:              First Fit
+Total memory:           4096 bytes
+Used memory:            768 bytes
+Free memory:            3328 bytes
+Memory utilization:     18.8%
+Allocations:            18
+Deallocations:          8
+Allocation failures:    0
+External fragmentation: 13.5%
+=========================
+
+> > Unknown command: # -----------------------------------------------------------------------------
+Type 'help' for available commands.
+> Unknown command: # Phase 4: Free all and verify coalescing
+Type 'help' for available commands.
+> Unknown command: # -----------------------------------------------------------------------------
+Type 'help' for available commands.
+> Block 1 freed and merged
+> Block 3 freed and merged
+> Block 5 freed and merged
+> Block 7 freed and merged
+> Block 9 freed and merged
+> Block 11 freed and merged
+> Block 13 freed and merged
+> Block 15 freed and merged
+> > 
+=== Memory Dump ===
+[0x0000 - 0x03bf] FREE [960 bytes]
+[0x03c0 - 0x043f] USED (id=17) [128 bytes]
+[0x0440 - 0x04bf] USED (id=18) [128 bytes]
+[0x04c0 - 0x0fff] FREE [2880 bytes]
+==================
+
+> 
+=== Memory Statistics ===
+Allocator:              First Fit
+Total memory:           4096 bytes
+Used memory:            256 bytes
+Free memory:            3840 bytes
+Memory utilization:     6.2%
+Allocations:            18
+Deallocations:          16
+Allocation failures:    0
+External fragmentation: 25.0%
+=========================
+
+> > Goodbye!

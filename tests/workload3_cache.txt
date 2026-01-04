@@ -2,6 +2,20 @@
 
 # Initialize cache hierarchy
 init cache
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 cache config
 
 # Sequential access pattern (good locality)

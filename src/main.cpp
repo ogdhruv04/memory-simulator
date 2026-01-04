@@ -47,7 +47,7 @@ MEMORY COMMANDS:
   stats                      Show memory statistics
 
 CACHE COMMANDS:
-  init cache                 Initialize default cache hierarchy (L1 + L2)
+  init cache                 Initialize cache hierarchy (interactive config)
   cache access <address>     Access memory address through cache
   cache stats                Show cache hit/miss statistics
   cache config               Show cache configuration
@@ -128,11 +128,65 @@ int main() {
         
         // ===== INIT CACHE =====
         else if (cmd == "init" && tokens.size() >= 2 && tokens[1] == "cache") {
-            // Initialize default cache hierarchy with realistic latencies
-            // L1: 256 bytes, 16-byte blocks, 4-way set associative, LRU, 1 cycle
-            cacheSimulator.addLevel("L1", 256, 16, 4, ReplacementPolicy::LRU, 1);
-            // L2: 1024 bytes, 32-byte blocks, 8-way set associative, FIFO, 10 cycles
-            cacheSimulator.addLevel("L2", 1024, 32, 8, ReplacementPolicy::FIFO, 10);
+            // Interactive cache configuration
+            std::cout << "\n=== Cache Configuration ===\n";
+            
+            // --- L1 Cache ---
+            std::cout << "\n-- L1 Cache --\n";
+            size_t l1_size, l1_block, l1_assoc, l1_latency;
+            std::string l1_policy_str;
+            
+            std::cout << "  Size (bytes) [default 256]: ";
+            std::getline(std::cin, line);
+            l1_size = line.empty() ? 256 : std::stoull(line);
+            
+            std::cout << "  Block size (bytes) [default 16]: ";
+            std::getline(std::cin, line);
+            l1_block = line.empty() ? 16 : std::stoull(line);
+            
+            std::cout << "  Associativity [default 4]: ";
+            std::getline(std::cin, line);
+            l1_assoc = line.empty() ? 4 : std::stoull(line);
+            
+            std::cout << "  Replacement policy (lru/fifo) [default lru]: ";
+            std::getline(std::cin, line);
+            l1_policy_str = line.empty() ? "lru" : line;
+            ReplacementPolicy l1_policy = (l1_policy_str == "fifo") ? ReplacementPolicy::FIFO : ReplacementPolicy::LRU;
+            
+            std::cout << "  Access latency (cycles) [default 1]: ";
+            std::getline(std::cin, line);
+            l1_latency = line.empty() ? 1 : std::stoull(line);
+            
+            // --- L2 Cache ---
+            std::cout << "\n-- L2 Cache --\n";
+            size_t l2_size, l2_block, l2_assoc, l2_latency;
+            std::string l2_policy_str;
+            
+            std::cout << "  Size (bytes) [default 1024]: ";
+            std::getline(std::cin, line);
+            l2_size = line.empty() ? 1024 : std::stoull(line);
+            
+            std::cout << "  Block size (bytes) [default 32]: ";
+            std::getline(std::cin, line);
+            l2_block = line.empty() ? 32 : std::stoull(line);
+            
+            std::cout << "  Associativity [default 8]: ";
+            std::getline(std::cin, line);
+            l2_assoc = line.empty() ? 8 : std::stoull(line);
+            
+            std::cout << "  Replacement policy (lru/fifo) [default fifo]: ";
+            std::getline(std::cin, line);
+            l2_policy_str = line.empty() ? "fifo" : line;
+            ReplacementPolicy l2_policy = (l2_policy_str == "lru") ? ReplacementPolicy::LRU : ReplacementPolicy::FIFO;
+            
+            std::cout << "  Access latency (cycles) [default 10]: ";
+            std::getline(std::cin, line);
+            l2_latency = line.empty() ? 10 : std::stoull(line);
+            
+            // Add the configured levels
+            std::cout << "\n";
+            cacheSimulator.addLevel("L1", l1_size, l1_block, l1_assoc, l1_policy, l1_latency);
+            cacheSimulator.addLevel("L2", l2_size, l2_block, l2_assoc, l2_policy, l2_latency);
             std::cout << "Cache hierarchy initialized (Memory latency: 100 cycles)\n";
         }
         

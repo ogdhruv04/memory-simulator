@@ -1,0 +1,171 @@
+
+╔══════════════════════════════════════════════════════════╗
+║         MEMORY MANAGEMENT SIMULATOR                      ║
+║         OS Memory Concepts Demonstration                 ║
+╚══════════════════════════════════════════════════════════╝
+Type 'help' for available commands.
+
+> Unknown command: # =============================================================================
+Type 'help' for available commands.
+> Unknown command: # WORKLOAD 5: Edge Cases and Error Handling
+Type 'help' for available commands.
+> Unknown command: # =============================================================================
+Type 'help' for available commands.
+> Unknown command: # Tests boundary conditions and error scenarios
+Type 'help' for available commands.
+> Unknown command: # =============================================================================
+Type 'help' for available commands.
+> > Unknown command: # -----------------------------------------------------------------------------
+Type 'help' for available commands.
+> Unknown command: # TEST 1: Operations before initialization (should show errors)
+Type 'help' for available commands.
+> Unknown command: # -----------------------------------------------------------------------------
+Type 'help' for available commands.
+> Error: Memory not initialized. Use 'init memory <size>' first.
+> Error: Memory not initialized
+> Memory not initialized
+> Memory not initialized
+> > Unknown command: # -----------------------------------------------------------------------------
+Type 'help' for available commands.
+> Unknown command: # TEST 2: Initialize and test zero/invalid allocations
+Type 'help' for available commands.
+> Unknown command: # -----------------------------------------------------------------------------
+Type 'help' for available commands.
+> Memory initialized: 256 bytes
+> > Error: Cannot allocate 0 bytes
+> > Unknown command: # -----------------------------------------------------------------------------
+Type 'help' for available commands.
+> Unknown command: # TEST 3: Exact fit allocation (no splitting needed)
+Type 'help' for available commands.
+> Unknown command: # -----------------------------------------------------------------------------
+Type 'help' for available commands.
+> Allocated block id=1 at address=0x0000 size=256
+> > 
+=== Memory Dump ===
+[0x0000 - 0x00ff] USED (id=1) [256 bytes]
+==================
+
+> 
+=== Memory Statistics ===
+Allocator:              First Fit
+Total memory:           256 bytes
+Used memory:            256 bytes
+Free memory:            0 bytes
+Memory utilization:     100.0%
+Allocations:            1
+Deallocations:          0
+Allocation failures:    0
+External fragmentation: 0.0%
+=========================
+
+> > Block 1 freed and merged
+> > Unknown command: # -----------------------------------------------------------------------------
+Type 'help' for available commands.
+> Unknown command: # TEST 4: Allocate more than available
+Type 'help' for available commands.
+> Unknown command: # -----------------------------------------------------------------------------
+Type 'help' for available commands.
+> Allocation failed: No suitable free block for size 300
+> > 
+=== Memory Statistics ===
+Allocator:              First Fit
+Total memory:           256 bytes
+Used memory:            0 bytes
+Free memory:            256 bytes
+Memory utilization:     0.0%
+Allocations:            1
+Deallocations:          1
+Allocation failures:    1
+External fragmentation: 0.0%
+=========================
+
+> > Unknown command: # -----------------------------------------------------------------------------
+Type 'help' for available commands.
+> Unknown command: # TEST 5: Double free attempt
+Type 'help' for available commands.
+> Unknown command: # -----------------------------------------------------------------------------
+Type 'help' for available commands.
+> Allocated block id=2 at address=0x0000 size=100
+> Error: Block 1 not found
+> Error: Block 1 not found
+> > Unknown command: # -----------------------------------------------------------------------------
+Type 'help' for available commands.
+> Unknown command: # TEST 6: Free non-existent block
+Type 'help' for available commands.
+> Unknown command: # -----------------------------------------------------------------------------
+Type 'help' for available commands.
+> Error: Block 999 not found
+> > Unknown command: # -----------------------------------------------------------------------------
+Type 'help' for available commands.
+> Unknown command: # TEST 7: Minimum allocation
+Type 'help' for available commands.
+> Unknown command: # -----------------------------------------------------------------------------
+Type 'help' for available commands.
+> Memory initialized: 1024 bytes
+> > Allocated block id=1 at address=0x0000 size=1
+> Allocated block id=2 at address=0x0001 size=1
+> Allocated block id=3 at address=0x0002 size=1
+> > 
+=== Memory Dump ===
+[0x0000 - 0x0000] USED (id=1) [1 bytes]
+[0x0001 - 0x0001] USED (id=2) [1 bytes]
+[0x0002 - 0x0002] USED (id=3) [1 bytes]
+[0x0003 - 0x03ff] FREE [1021 bytes]
+==================
+
+> > Block 1 freed and merged
+> Block 2 freed and merged
+> Block 3 freed and merged
+> > 
+=== Memory Dump ===
+[0x0000 - 0x03ff] FREE [1024 bytes]
+==================
+
+> 
+=== Memory Statistics ===
+Allocator:              First Fit
+Total memory:           1024 bytes
+Used memory:            0 bytes
+Free memory:            1024 bytes
+Memory utilization:     0.0%
+Allocations:            3
+Deallocations:          3
+Allocation failures:    0
+External fragmentation: 0.0%
+=========================
+
+> > Unknown command: # -----------------------------------------------------------------------------
+Type 'help' for available commands.
+> Unknown command: # TEST 8: Re-initialization (should clear everything)
+Type 'help' for available commands.
+> Unknown command: # -----------------------------------------------------------------------------
+Type 'help' for available commands.
+> Allocated block id=4 at address=0x0000 size=100
+> Allocated block id=5 at address=0x0064 size=200
+> > 
+=== Memory Dump ===
+[0x0000 - 0x0063] USED (id=4) [100 bytes]
+[0x0064 - 0x012b] USED (id=5) [200 bytes]
+[0x012c - 0x03ff] FREE [724 bytes]
+==================
+
+> > Memory initialized: 512 bytes
+> > 
+=== Memory Dump ===
+[0x0000 - 0x01ff] FREE [512 bytes]
+==================
+
+> 
+=== Memory Statistics ===
+Allocator:              First Fit
+Total memory:           512 bytes
+Used memory:            0 bytes
+Free memory:            512 bytes
+Memory utilization:     0.0%
+Allocations:            0
+Deallocations:          0
+Allocation failures:    0
+External fragmentation: 0.0%
+=========================
+
+> > Goodbye!

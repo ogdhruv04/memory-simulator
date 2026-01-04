@@ -1,0 +1,72 @@
+# =============================================================================
+# WORKLOAD 4: Stress Test - Heavy Allocation/Deallocation
+# =============================================================================
+# Tests system under heavy load with many allocations and frees
+# =============================================================================
+
+init memory 4096
+set allocator first_fit
+
+# -----------------------------------------------------------------------------
+# Phase 1: Fill memory with many small blocks
+# -----------------------------------------------------------------------------
+malloc 64
+malloc 64
+malloc 64
+malloc 64
+malloc 64
+malloc 64
+malloc 64
+malloc 64
+malloc 64
+malloc 64
+malloc 64
+malloc 64
+malloc 64
+malloc 64
+malloc 64
+malloc 64
+
+dump memory
+stats
+
+# -----------------------------------------------------------------------------
+# Phase 2: Free every other block (creates checkerboard pattern)
+# -----------------------------------------------------------------------------
+free 2
+free 4
+free 6
+free 8
+free 10
+free 12
+free 14
+free 16
+
+dump memory
+stats
+
+# -----------------------------------------------------------------------------
+# Phase 3: Try to allocate larger blocks (tests fragmentation impact)
+# -----------------------------------------------------------------------------
+malloc 128
+malloc 128
+
+dump memory
+stats
+
+# -----------------------------------------------------------------------------
+# Phase 4: Free all and verify coalescing
+# -----------------------------------------------------------------------------
+free 1
+free 3
+free 5
+free 7
+free 9
+free 11
+free 13
+free 15
+
+dump memory
+stats
+
+exit

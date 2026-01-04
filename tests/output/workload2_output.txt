@@ -1,0 +1,105 @@
+
+╔══════════════════════════════════════════════════════════╗
+║         MEMORY MANAGEMENT SIMULATOR                      ║
+║         OS Memory Concepts Demonstration                 ║
+╚══════════════════════════════════════════════════════════╝
+Type 'help' for available commands.
+
+> Unknown command: # Test workload 2: Compare allocation strategies
+Type 'help' for available commands.
+> Unknown command: # Run the same workload with different strategies
+Type 'help' for available commands.
+> > Unknown command: # ===== FIRST FIT =====
+Type 'help' for available commands.
+> Memory initialized: 512 bytes
+> Allocator set to: First Fit
+> Allocated block id=1 at address=0x0000 size=64
+> Allocated block id=2 at address=0x0040 size=128
+> Allocated block id=3 at address=0x00c0 size=64
+> Block 2 freed and merged
+> Allocated block id=4 at address=0x0040 size=32
+> 
+=== Memory Dump ===
+[0x0000 - 0x003f] USED (id=1) [64 bytes]
+[0x0040 - 0x005f] USED (id=4) [32 bytes]
+[0x0060 - 0x00bf] FREE [96 bytes]
+[0x00c0 - 0x00ff] USED (id=3) [64 bytes]
+[0x0100 - 0x01ff] FREE [256 bytes]
+==================
+
+> 
+=== Memory Statistics ===
+Allocator:              First Fit
+Total memory:           512 bytes
+Used memory:            160 bytes
+Free memory:            352 bytes
+Memory utilization:     31.2%
+Allocations:            4
+Deallocations:          1
+Allocation failures:    0
+External fragmentation: 27.3%
+=========================
+
+> > Unknown command: # ===== BEST FIT =====
+Type 'help' for available commands.
+> Memory initialized: 512 bytes
+> Allocator set to: Best Fit
+> Allocated block id=1 at address=0x0000 size=64
+> Allocated block id=2 at address=0x0040 size=128
+> Allocated block id=3 at address=0x00c0 size=64
+> Block 2 freed and merged
+> Allocated block id=4 at address=0x0040 size=32
+> 
+=== Memory Dump ===
+[0x0000 - 0x003f] USED (id=1) [64 bytes]
+[0x0040 - 0x005f] USED (id=4) [32 bytes]
+[0x0060 - 0x00bf] FREE [96 bytes]
+[0x00c0 - 0x00ff] USED (id=3) [64 bytes]
+[0x0100 - 0x01ff] FREE [256 bytes]
+==================
+
+> 
+=== Memory Statistics ===
+Allocator:              Best Fit
+Total memory:           512 bytes
+Used memory:            160 bytes
+Free memory:            352 bytes
+Memory utilization:     31.2%
+Allocations:            4
+Deallocations:          1
+Allocation failures:    0
+External fragmentation: 27.3%
+=========================
+
+> > Unknown command: # ===== WORST FIT =====
+Type 'help' for available commands.
+> Memory initialized: 512 bytes
+> Allocator set to: Worst Fit
+> Allocated block id=1 at address=0x0000 size=64
+> Allocated block id=2 at address=0x0040 size=128
+> Allocated block id=3 at address=0x00c0 size=64
+> Block 2 freed and merged
+> Allocated block id=4 at address=0x0100 size=32
+> 
+=== Memory Dump ===
+[0x0000 - 0x003f] USED (id=1) [64 bytes]
+[0x0040 - 0x00bf] FREE [128 bytes]
+[0x00c0 - 0x00ff] USED (id=3) [64 bytes]
+[0x0100 - 0x011f] USED (id=4) [32 bytes]
+[0x0120 - 0x01ff] FREE [224 bytes]
+==================
+
+> 
+=== Memory Statistics ===
+Allocator:              Worst Fit
+Total memory:           512 bytes
+Used memory:            160 bytes
+Free memory:            352 bytes
+Memory utilization:     31.2%
+Allocations:            4
+Deallocations:          1
+Allocation failures:    0
+External fragmentation: 36.4%
+=========================
+
+> > Goodbye!

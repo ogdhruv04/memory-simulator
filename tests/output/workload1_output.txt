@@ -1,0 +1,112 @@
+
+╔══════════════════════════════════════════════════════════╗
+║         MEMORY MANAGEMENT SIMULATOR                      ║
+║         OS Memory Concepts Demonstration                 ║
+╚══════════════════════════════════════════════════════════╝
+Type 'help' for available commands.
+
+> Unknown command: # Test workload 1: Basic allocation and deallocation
+Type 'help' for available commands.
+> Unknown command: # This tests First Fit allocation
+Type 'help' for available commands.
+> > Memory initialized: 1024 bytes
+> Allocator set to: First Fit
+> > Unknown command: # Allocate several blocks
+Type 'help' for available commands.
+> Allocated block id=1 at address=0x0000 size=100
+> Allocated block id=2 at address=0x0064 size=200
+> Allocated block id=3 at address=0x012c size=150
+> Allocated block id=4 at address=0x01c2 size=100
+> > Unknown command: # Show memory state
+Type 'help' for available commands.
+> 
+=== Memory Dump ===
+[0x0000 - 0x0063] USED (id=1) [100 bytes]
+[0x0064 - 0x012b] USED (id=2) [200 bytes]
+[0x012c - 0x01c1] USED (id=3) [150 bytes]
+[0x01c2 - 0x0225] USED (id=4) [100 bytes]
+[0x0226 - 0x03ff] FREE [474 bytes]
+==================
+
+> 
+=== Memory Statistics ===
+Allocator:              First Fit
+Total memory:           1024 bytes
+Used memory:            550 bytes
+Free memory:            474 bytes
+Memory utilization:     53.7%
+Allocations:            4
+Deallocations:          0
+Allocation failures:    0
+External fragmentation: 0.0%
+=========================
+
+> > Unknown command: # Free middle block to create a hole
+Type 'help' for available commands.
+> Block 2 freed and merged
+> > Unknown command: # Show fragmentation
+Type 'help' for available commands.
+> 
+=== Memory Dump ===
+[0x0000 - 0x0063] USED (id=1) [100 bytes]
+[0x0064 - 0x012b] FREE [200 bytes]
+[0x012c - 0x01c1] USED (id=3) [150 bytes]
+[0x01c2 - 0x0225] USED (id=4) [100 bytes]
+[0x0226 - 0x03ff] FREE [474 bytes]
+==================
+
+> 
+=== Memory Statistics ===
+Allocator:              First Fit
+Total memory:           1024 bytes
+Used memory:            350 bytes
+Free memory:            674 bytes
+Memory utilization:     34.2%
+Allocations:            4
+Deallocations:          1
+Allocation failures:    0
+External fragmentation: 29.7%
+=========================
+
+> > Unknown command: # Allocate smaller block - should fill the hole
+Type 'help' for available commands.
+> Allocated block id=5 at address=0x0064 size=50
+> 
+=== Memory Dump ===
+[0x0000 - 0x0063] USED (id=1) [100 bytes]
+[0x0064 - 0x0095] USED (id=5) [50 bytes]
+[0x0096 - 0x012b] FREE [150 bytes]
+[0x012c - 0x01c1] USED (id=3) [150 bytes]
+[0x01c2 - 0x0225] USED (id=4) [100 bytes]
+[0x0226 - 0x03ff] FREE [474 bytes]
+==================
+
+> > Unknown command: # Free more blocks
+Type 'help' for available commands.
+> Block 1 freed and merged
+> Block 3 freed and merged
+> > Unknown command: # Coalescing should happen
+Type 'help' for available commands.
+> 
+=== Memory Dump ===
+[0x0000 - 0x0063] FREE [100 bytes]
+[0x0064 - 0x0095] USED (id=5) [50 bytes]
+[0x0096 - 0x01c1] FREE [300 bytes]
+[0x01c2 - 0x0225] USED (id=4) [100 bytes]
+[0x0226 - 0x03ff] FREE [474 bytes]
+==================
+
+> 
+=== Memory Statistics ===
+Allocator:              First Fit
+Total memory:           1024 bytes
+Used memory:            150 bytes
+Free memory:            874 bytes
+Memory utilization:     14.6%
+Allocations:            5
+Deallocations:          3
+Allocation failures:    0
+External fragmentation: 45.8%
+=========================
+
+> > Goodbye!

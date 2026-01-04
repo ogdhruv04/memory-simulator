@@ -1,0 +1,59 @@
+# =============================================================================
+# WORKLOAD 6: Cache Replacement Policy Comparison
+# =============================================================================
+# This workload is designed to show differences between LRU and FIFO
+# Run twice with different configurations to compare!
+#
+# Config 1 (LRU): Size=64, Block=16, Assoc=2, Policy=lru, Latency=1
+# Config 2 (FIFO): Size=64, Block=16, Assoc=2, Policy=fifo, Latency=1
+# =============================================================================
+
+# For testing, use this small L1-only setup:
+# L1: 64 bytes, 16B blocks, 2-way = 2 sets × 2 ways = 4 lines total
+# L2: 256 bytes, 16B blocks, 4-way (won't matter much for this test)
+
+init cache
+64
+16
+2
+lru
+1
+256
+16
+4
+fifo
+5
+
+cache config
+
+# =============================================================================
+# LRU vs FIFO Test Pattern
+# With 2-way associativity and 2 sets:
+#   - Addresses 0x00, 0x40 map to set 0
+#   - Addresses 0x10, 0x50 map to set 1
+# =============================================================================
+
+# Fill set 0 with two addresses
+cache access 0x00
+cache access 0x40
+
+# Access 0x00 again (makes it "recently used" for LRU)
+cache access 0x00
+
+# Now access a third address that maps to set 0
+# LRU should evict 0x40 (least recently used)
+# FIFO should evict 0x00 (first in)
+cache access 0x80
+
+cache stats
+
+# Now test which one is still in cache:
+# If LRU: 0x00 should HIT, 0x40 should MISS
+# If FIFO: 0x00 should MISS, 0x40 should HIT
+
+cache access 0x00
+cache access 0x40
+
+cache stats
+
+exit

@@ -1,0 +1,126 @@
+
+╔══════════════════════════════════════════════════════════╗
+║         MEMORY MANAGEMENT SIMULATOR                      ║
+║         OS Memory Concepts Demonstration                 ║
+╚══════════════════════════════════════════════════════════╝
+Type 'help' for available commands.
+
+> Unknown command: # =============================================================================
+Type 'help' for available commands.
+> Unknown command: # WORKLOAD 6: Cache Replacement Policy Comparison
+Type 'help' for available commands.
+> Unknown command: # =============================================================================
+Type 'help' for available commands.
+> Unknown command: # This workload is designed to show differences between LRU and FIFO
+Type 'help' for available commands.
+> Unknown command: # Run twice with different configurations to compare!
+Type 'help' for available commands.
+> Unknown command: #
+Type 'help' for available commands.
+> Unknown command: # Config 1 (LRU): Size=64, Block=16, Assoc=2, Policy=lru, Latency=1
+Type 'help' for available commands.
+> Unknown command: # Config 2 (FIFO): Size=64, Block=16, Assoc=2, Policy=fifo, Latency=1
+Type 'help' for available commands.
+> Unknown command: # =============================================================================
+Type 'help' for available commands.
+> > Unknown command: # For testing, use this small L1-only setup:
+Type 'help' for available commands.
+> Unknown command: # L1: 64 bytes, 16B blocks, 2-way = 2 sets × 2 ways = 4 lines total
+Type 'help' for available commands.
+> Unknown command: # L2: 256 bytes, 16B blocks, 4-way (won't matter much for this test)
+Type 'help' for available commands.
+> > 
+=== Cache Configuration ===
+
+-- L1 Cache --
+  Size (bytes) [default 256]:   Block size (bytes) [default 16]:   Associativity [default 4]:   Replacement policy (lru/fifo) [default lru]:   Access latency (cycles) [default 1]: 
+-- L2 Cache --
+  Size (bytes) [default 1024]:   Block size (bytes) [default 32]:   Associativity [default 8]:   Replacement policy (lru/fifo) [default fifo]:   Access latency (cycles) [default 10]: 
+Added cache level: L1: 64 bytes, 16B blocks, 2-way, LRU (1 cycle latency)
+Added cache level: L2: 256 bytes, 16B blocks, 4-way, FIFO (5 cycles latency)
+Cache hierarchy initialized (Memory latency: 100 cycles)
+> > 
+=== Cache Configuration ===
+  L1: 64 bytes, 16B blocks, 2-way, LRU
+  L2: 256 bytes, 16B blocks, 4-way, FIFO
+===========================
+
+> > Unknown command: # =============================================================================
+Type 'help' for available commands.
+> Unknown command: # LRU vs FIFO Test Pattern
+Type 'help' for available commands.
+> Unknown command: # With 2-way associativity and 2 sets:
+Type 'help' for available commands.
+> Unknown command: #   - Addresses 0x00, 0x40 map to set 0
+Type 'help' for available commands.
+> Unknown command: #   - Addresses 0x10, 0x50 map to set 1
+Type 'help' for available commands.
+> Unknown command: # =============================================================================
+Type 'help' for available commands.
+> > Unknown command: # Fill set 0 with two addresses
+Type 'help' for available commands.
+>   → L1 MISS → L2 MISS → MEMORY (106 cycles)
+Accessed address: 0x0
+>   → L1 MISS → L2 MISS → MEMORY (106 cycles)
+Accessed address: 0x40
+> > Unknown command: # Access 0x00 again (makes it "recently used" for LRU)
+Type 'help' for available commands.
+>   → L1 HIT (1 cycles)
+Accessed address: 0x0
+> > Unknown command: # Now access a third address that maps to set 0
+Type 'help' for available commands.
+> Unknown command: # LRU should evict 0x40 (least recently used)
+Type 'help' for available commands.
+> Unknown command: # FIFO should evict 0x00 (first in)
+Type 'help' for available commands.
+>   → L1 MISS → L2 MISS → MEMORY (106 cycles)
+Accessed address: 0x80
+> > 
+=== Cache Statistics ===
+L1:
+  Accesses: 4
+  Hits:     1
+  Misses:   3
+  Hit Rate: 25.00%
+  Access Time: 4 cycles
+L2:
+  Accesses: 3
+  Hits:     0
+  Misses:   3
+  Hit Rate: 0.00%
+  Access Time: 15 cycles
+------------------------
+Total Access Time: 319 cycles
+Memory Latency:    100 cycles
+========================
+
+> > Unknown command: # Now test which one is still in cache:
+Type 'help' for available commands.
+> Unknown command: # If LRU: 0x00 should HIT, 0x40 should MISS
+Type 'help' for available commands.
+> Unknown command: # If FIFO: 0x00 should MISS, 0x40 should HIT
+Type 'help' for available commands.
+> >   → L1 HIT (1 cycles)
+Accessed address: 0x0
+>   → L1 MISS → L2 HIT (6 cycles)
+Accessed address: 0x40
+> > 
+=== Cache Statistics ===
+L1:
+  Accesses: 6
+  Hits:     2
+  Misses:   4
+  Hit Rate: 33.33%
+  Access Time: 6 cycles
+L2:
+  Accesses: 4
+  Hits:     1
+  Misses:   3
+  Hit Rate: 25.00%
+  Access Time: 20 cycles
+------------------------
+Total Access Time: 326 cycles
+Memory Latency:    100 cycles
+========================
+
+> > Goodbye!

@@ -1,0 +1,118 @@
+
+╔══════════════════════════════════════════════════════════╗
+║         MEMORY MANAGEMENT SIMULATOR                      ║
+║         OS Memory Concepts Demonstration                 ║
+╚══════════════════════════════════════════════════════════╝
+Type 'help' for available commands.
+
+> Unknown command: # Test workload 3: Cache simulation
+Type 'help' for available commands.
+> > Unknown command: # Initialize cache hierarchy
+Type 'help' for available commands.
+> 
+=== Cache Configuration ===
+
+-- L1 Cache --
+  Size (bytes) [default 256]:   Block size (bytes) [default 16]:   Associativity [default 4]:   Replacement policy (lru/fifo) [default lru]:   Access latency (cycles) [default 1]: 
+-- L2 Cache --
+  Size (bytes) [default 1024]:   Block size (bytes) [default 32]:   Associativity [default 8]:   Replacement policy (lru/fifo) [default fifo]:   Access latency (cycles) [default 10]: 
+Added cache level: L1: 256 bytes, 16B blocks, 4-way, LRU (1 cycle latency)
+Added cache level: L2: 1024 bytes, 32B blocks, 8-way, FIFO (10 cycles latency)
+Cache hierarchy initialized (Memory latency: 100 cycles)
+> > > > > 
+=== Cache Configuration ===
+  L1: 256 bytes, 16B blocks, 4-way, LRU
+  L2: 1024 bytes, 32B blocks, 8-way, FIFO
+===========================
+
+> > Unknown command: # Sequential access pattern (good locality)
+Type 'help' for available commands.
+>   → L1 MISS → L2 MISS → MEMORY (111 cycles)
+Accessed address: 0x0
+>   → L1 MISS → L2 HIT (11 cycles)
+Accessed address: 0x10
+>   → L1 MISS → L2 MISS → MEMORY (111 cycles)
+Accessed address: 0x20
+>   → L1 MISS → L2 HIT (11 cycles)
+Accessed address: 0x30
+> 
+=== Cache Statistics ===
+L1:
+  Accesses: 4
+  Hits:     0
+  Misses:   4
+  Hit Rate: 0.00%
+  Access Time: 4 cycles
+L2:
+  Accesses: 4
+  Hits:     2
+  Misses:   2
+  Hit Rate: 50.00%
+  Access Time: 40 cycles
+------------------------
+Total Access Time: 244 cycles
+Memory Latency:    100 cycles
+========================
+
+> > Unknown command: # Access same addresses again (should hit)
+Type 'help' for available commands.
+>   → L1 HIT (1 cycles)
+Accessed address: 0x0
+>   → L1 HIT (1 cycles)
+Accessed address: 0x10
+>   → L1 HIT (1 cycles)
+Accessed address: 0x20
+>   → L1 HIT (1 cycles)
+Accessed address: 0x30
+> 
+=== Cache Statistics ===
+L1:
+  Accesses: 8
+  Hits:     4
+  Misses:   4
+  Hit Rate: 50.00%
+  Access Time: 8 cycles
+L2:
+  Accesses: 4
+  Hits:     2
+  Misses:   2
+  Hit Rate: 50.00%
+  Access Time: 40 cycles
+------------------------
+Total Access Time: 248 cycles
+Memory Latency:    100 cycles
+========================
+
+> > Unknown command: # Reset and test random pattern
+Type 'help' for available commands.
+> Cache statistics reset
+>   → L1 MISS → L2 MISS → MEMORY (111 cycles)
+Accessed address: 0x1000
+>   → L1 MISS → L2 MISS → MEMORY (111 cycles)
+Accessed address: 0x2000
+>   → L1 MISS → L2 MISS → MEMORY (111 cycles)
+Accessed address: 0x3000
+>   → L1 MISS → L2 MISS → MEMORY (111 cycles)
+Accessed address: 0x4000
+>   → L1 HIT (1 cycles)
+Accessed address: 0x1000
+> 
+=== Cache Statistics ===
+L1:
+  Accesses: 5
+  Hits:     1
+  Misses:   4
+  Hit Rate: 20.00%
+  Access Time: 5 cycles
+L2:
+  Accesses: 4
+  Hits:     0
+  Misses:   4
+  Hit Rate: 0.00%
+  Access Time: 40 cycles
+------------------------
+Total Access Time: 693 cycles
+Memory Latency:    100 cycles
+========================
+
+> > Goodbye!
