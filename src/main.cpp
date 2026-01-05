@@ -48,7 +48,9 @@ MEMORY COMMANDS:
 
 CACHE COMMANDS:
   init cache                 Initialize cache hierarchy (interactive config)
-  cache access <address>     Access memory address through cache
+  cache read <address>       Read from memory address through cache
+  cache write <address>      Write to memory address (sets dirty bit)
+  cache access <address>     Alias for 'cache read'
   cache stats                Show cache hit/miss statistics
   cache config               Show cache configuration
   cache reset                Reset cache statistics
@@ -247,15 +249,30 @@ int main() {
             }
         }
         
-        // ===== CACHE ACCESS =====
-        else if (cmd == "cache" && tokens.size() >= 3 && tokens[1] == "access") {
+        // ===== CACHE READ =====
+        else if (cmd == "cache" && tokens.size() >= 3 && (tokens[1] == "read" || tokens[1] == "access")) {
             if (!cacheSimulator.isInitialized()) {
                 std::cout << "Error: Cache not initialized. Use 'init cache' first.\n";
             } else {
                 try {
                     size_t address = std::stoull(tokens[2], nullptr, 0);  // Supports hex
-                    cacheSimulator.access(address);
-                    std::cout << "Accessed address: 0x" << std::hex << address << std::dec << "\n";
+                    std::cout << "Reading address: 0x" << std::hex << address << std::dec << "\n";
+                    cacheSimulator.access(address, false);  // isWrite = false
+                } catch (...) {
+                    std::cout << "Error: Invalid address\n";
+                }
+            }
+        }
+        
+        // ===== CACHE WRITE =====
+        else if (cmd == "cache" && tokens.size() >= 3 && tokens[1] == "write") {
+            if (!cacheSimulator.isInitialized()) {
+                std::cout << "Error: Cache not initialized. Use 'init cache' first.\n";
+            } else {
+                try {
+                    size_t address = std::stoull(tokens[2], nullptr, 0);  // Supports hex
+                    std::cout << "Writing address: 0x" << std::hex << address << std::dec << "\n";
+                    cacheSimulator.access(address, true);  // isWrite = true
                 } catch (...) {
                     std::cout << "Error: Invalid address\n";
                 }

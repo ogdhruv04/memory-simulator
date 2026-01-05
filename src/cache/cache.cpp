@@ -65,10 +65,10 @@ size_t CacheLevel::findVictim(size_t set_index) {
     }
 }
 
-bool CacheLevel::access(size_t address) {
+bool CacheLevel::access(size_t address, bool isWrite) {
     stats.accesses++;
     stats.total_access_time += access_latency;  // Always pay the access cost
-    access_counter++;;
+    access_counter++;
     
     size_t set_index = getSetIndex(address);
     size_t tag = getTag(address);
@@ -80,6 +80,9 @@ bool CacheLevel::access(size_t address) {
             // Hit!
             stats.hits++;
             set[i].last_access = access_counter;  // Update for LRU
+            if (isWrite) {
+                set[i].dirty = true;  // Mark as modified
+            }
             return true;
         }
     }
@@ -88,9 +91,15 @@ bool CacheLevel::access(size_t address) {
     stats.misses++;
     size_t victim = findVictim(set_index);
     
+    // Check if victim is dirty (needs write-back)
+    if (set[victim].valid && set[victim].dirty) {
+        stats.write_backs++;
+    }
+    
     set[victim].valid = true;
     set[victim].tag = tag;
     set[victim].last_access = access_counter;
+    set[victim].dirty = isWrite;  // New line is dirty if this is a write
     
     // Update FIFO queue
     if (policy == ReplacementPolicy::FIFO) {
@@ -136,19 +145,20 @@ void CacheSimulator::addLevel(const std::string& name, size_t size,
               << " (" << latency << " cycle" << (latency > 1 ? "s" : "") << " latency)\n";
 }
 
-void CacheSimulator::access(size_t address) {
+void CacheSimulator::access(size_t address, bool isWrite) {
     // Access through cache hierarchy with verbose output
     size_t access_time = 0;
     std::string path = "";
+    std::string op = isWrite ? "WRITE" : "READ";
     
     for (size_t i = 0; i < levels.size(); i++) {
         auto level = levels[i];
         access_time += level->getLatency();
         
-        if (level->access(address)) {
+        if (level->access(address, isWrite)) {
             // Hit at this level
             path += level->getName() + " HIT";
-            std::cout << "  → " << path << " (" << access_time << " cycles)\n";
+            std::cout << "  [" << op << "] → " << path << " (" << access_time << " cycles)\n";
             total_access_time += access_time;
             return;
         } else {
@@ -160,7 +170,7 @@ void CacheSimulator::access(size_t address) {
     // Miss at all levels - access main memory
     access_time += memory_latency;
     path += "MEMORY";
-    std::cout << "  → " << path << " (" << access_time << " cycles)\n";
+    std::cout << "  [" << op << "] → " << path << " (" << access_time << " cycles)\n";
     total_access_time += access_time;
 }
 
@@ -169,10 +179,11 @@ void CacheSimulator::printStats() const {
     for (const auto& level : levels) {
         CacheStats stats = level->getStats();
         std::cout << level->getName() << ":\n";
-        std::cout << "  Accesses: " << stats.accesses << "\n";
-        std::cout << "  Hits:     " << stats.hits << "\n";
-        std::cout << "  Misses:   " << stats.misses << "\n";
-        std::cout << "  Hit Rate: " << std::fixed << std::setprecision(2) 
+        std::cout << "  Accesses:    " << stats.accesses << "\n";
+        std::cout << "  Hits:        " << stats.hits << "\n";
+        std::cout << "  Misses:      " << stats.misses << "\n";
+        std::cout << "  Write-backs: " << stats.write_backs << "\n";
+        std::cout << "  Hit Rate:    " << std::fixed << std::setprecision(2) 
                   << stats.hitRatio() << "%\n";
         std::cout << "  Access Time: " << stats.total_access_time << " cycles\n";
     }

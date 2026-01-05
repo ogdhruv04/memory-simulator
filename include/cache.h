@@ -15,10 +15,11 @@ enum class ReplacementPolicy {
 // Single cache line
 struct CacheLine {
     bool valid;
+    bool dirty;          // Modified bit - true if written to
     size_t tag;
     size_t last_access;  // For LRU
     
-    CacheLine() : valid(false), tag(0), last_access(0) {}
+    CacheLine() : valid(false), dirty(false), tag(0), last_access(0) {}
 };
 
 // Statistics for a single cache level
@@ -26,9 +27,10 @@ struct CacheStats {
     size_t hits;
     size_t misses;
     size_t accesses;
+    size_t write_backs;      // Dirty lines written back to memory on eviction
     size_t total_access_time;  // Total cycles spent accessing this level
     
-    CacheStats() : hits(0), misses(0), accesses(0), total_access_time(0) {}
+    CacheStats() : hits(0), misses(0), accesses(0), write_backs(0), total_access_time(0) {}
     
     double hitRatio() const {
         return accesses > 0 ? (double)hits / accesses * 100.0 : 0.0;
@@ -68,7 +70,8 @@ public:
                size_t latency = 1);
     
     // Access cache, returns true on hit, false on miss
-    bool access(size_t address);
+    // isWrite: if true, marks the line as dirty (write-back policy)
+    bool access(size_t address, bool isWrite = false);
     
     // Get access latency for this level
     size_t getLatency() const { return access_latency; }
@@ -103,7 +106,8 @@ public:
                   ReplacementPolicy policy, size_t latency = 1);
     
     // Access memory address through cache hierarchy (verbose output)
-    void access(size_t address);
+    // isWrite: if true, marks the line as dirty (write-back policy)
+    void access(size_t address, bool isWrite = false);
     
     // Print statistics for all levels
     void printStats() const;
