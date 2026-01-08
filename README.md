@@ -7,7 +7,6 @@ A comprehensive memory management simulator implementing OS-level memory concept
 - **Physical Memory Allocation**: First Fit, Best Fit, Worst Fit algorithms
 - **Cache Simulation**: L1/L2 multilevel cache with FIFO/LRU replacement
 - **Statistics**: Fragmentation metrics, hit/miss ratios
-- **Optional**: Buddy allocation, Virtual memory with paging
 
 ## Building the Project
 
